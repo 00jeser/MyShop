@@ -1,0 +1,16 @@
+﻿@inherits LayoutComponentBase
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<MudLayout>
+    <MudAppBar>
+        <a href="../"><MudText Style="color: white;" Typo="Typo.h4">My Shop</MudText></a>
+    </MudAppBar>
+    <MudDrawer Open="true">
+        <CategoriesList/>
+    </MudDrawer>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>

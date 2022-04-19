@@ -1,0 +1,43 @@
+﻿@page "/info/{Id?}"
+@using MyShop.Shared
+@inject HttpClient Http
+
+@if (_product == null)
+{
+    <MudGrid>
+        <MudItem>
+            <MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="500" Height="500" />
+        </MudItem>
+        <MudItem>
+            <MudSkeleton /><MudSkeleton /><MudSkeleton /><MudSkeleton /><MudSkeleton /><MudSkeleton /><MudSkeleton /><MudSkeleton /><MudSkeleton />
+        </MudItem>
+    </MudGrid>
+}
+else
+{
+    <MudGrid>
+        <MudItem>
+            <MudImage Src="@_product.Img" Alt="Image" Elevation="25" Class="rounded-lg" Width="500" />
+        </MudItem>
+        <MudItem>
+            <MudText Typo="Typo.h2">@_product.Name</MudText>
+            <MudButton Href="../">@_product.Category.Name</MudButton>
+            <MudText Typo="Typo.h6">@_product.Price ₽</MudText>
+            <MudText>@_product.Description</MudText>
+            <MudText>@_product.specifications</MudText>
+        </MudItem>
+    </MudGrid>
+}
+
+@code
+{
+    [Parameter]
+    public string? Id { get; set; }
+
+    private Product _product;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _product = await Http.GetFromJsonAsync<Product?>($"Products/OneProduct/{Id}") ?? new Product() { Name = "Error" };
+    }
+}

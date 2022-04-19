@@ -1,0 +1,19 @@
+﻿@using MyShop.Shared
+@using System.Net
+@inject NavigationManager Navigator
+@inject HttpClient Http
+
+<MudText>Категории</MudText>
+@foreach (var c in _categories!)
+{
+    <MudButton Href="@($"./category/{c.Id}")" Style="min-height: 40px">@c.Name</MudButton>
+}
+
+@code {
+    private Category[]? _categories = Array.Empty<Category>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _categories = await Http.GetFromJsonAsync<Category[]>("Products/Categories");
+    }
+}

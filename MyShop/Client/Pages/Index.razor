@@ -1,0 +1,31 @@
+﻿@page "/"
+@using MyShop.Shared
+@inject HttpClient Http
+
+<div Class="d-flex justify-center flex-grow-1 gap-4 flex-wrap" MaxWidth="560px" Elevation="0">
+    @foreach (var c in _products!)
+    {
+        <MudCard>
+            <MudCardMedia Image="@c.Img" Height="200" />
+            <MudCardContent>
+                <MudText Typo="Typo.h5">@c.Name</MudText>
+                <MudText Typo="Typo.caption">@c.Category?.Name</MudText>
+                <MudText Typo="Typo.body2">@(new string(c.Description.Take(20).ToArray()))@(c.Description.Length > 20?"...":"")</MudText>
+                <MudText Typo="Typo.h4">@c.Price ₽</MudText>
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton Href="@($"../info/{c.Id}")" Variant="Variant.Text" Color="Color.Primary">Подробнее</MudButton>
+                <MudButton Variant="Variant.Text" Color="Color.Primary">Купить</MudButton>
+            </MudCardActions>
+        </MudCard>
+    }
+</div>
+
+@code {
+    private Product[]? _products = Array.Empty<Product>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _products = await Http.GetFromJsonAsync<Product[]>("Products/AllProducts");
+    }
+}
