@@ -21,7 +21,7 @@ else
         </MudItem>
         <MudItem>
             <MudText Typo="Typo.h2">@_product.Name</MudText>
-            <MudButton Href="../">@_product.Category.Name</MudButton>
+            <MudButton Href="@($"../category/{_product.Category.Id}")">@_product.Category.Name</MudButton>
             <MudText Typo="Typo.h6">@_product.Price ₽</MudText>
             <MudText>@_product.Description</MudText>
             <MudText>@_product.specifications</MudText>
