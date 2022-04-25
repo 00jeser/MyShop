@@ -1,0 +1,51 @@
+﻿@page "/order/{Id?}"
+@using MyShop.Shared
+@inject HttpClient http
+
+@if (Id == null || !int.TryParse(Id, out int iId) || prod == null)
+{
+    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="500" Height="500"></MudSkeleton>
+}
+else
+{
+    <MudText>Заказ</MudText>
+    <MudText>@prod.Name</MudText>
+    <MudText>@prod.Price ₽</MudText>
+    <MudTextField Variant="Variant.Filled" T="string" Label="Имя Фамилия" @ref="mfName"></MudTextField>
+    <MudTextField Variant="Variant.Filled" T="string" Label="Аддрес доставки" @ref="mfAddres"></MudTextField>
+    <MudTextField Variant="Variant.Filled" T="string" Label="Email" @ref="mfEmail"></MudTextField>
+    <MudButton OnClick="ord">Заказать</MudButton>
+}
+
+
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+    Product? prod { get; set; }
+    MudTextField<string> mfName;
+    MudTextField<string> mfAddres;
+    MudTextField<string> mfEmail;
+
+    private async void ord()
+    {
+        var rez = await http.PostAsJsonAsync("Order", new MyShop.Shared.Order()
+        {
+            Addres = mfAddres.Value,
+            Email = mfEmail.Value,
+            Name = mfName.Value,
+            Id = 0,
+            Product = prod
+        });
+        if( (await rez.Content.ReadAsStringAsync()) == "false")
+        {
+
+        }
+        Console.WriteLine(await rez.Content.ReadAsStringAsync());
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        prod = await http.GetFromJsonAsync<Product>($"Products/OneProduct/{Id}");
+    }
+
+}
